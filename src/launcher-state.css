@@ -33,6 +33,7 @@
 .civ-select{padding:12px 16px}
 .prototype-note{margin-top:20px;border-radius:8px}
 .bottom-bar{padding-left:clamp(24px,4vw,48px);padding-right:clamp(24px,4vw,48px)}
+.bottom-actions{display:flex;align-items:center;gap:10px}.bottom-actions .update-shortcut{height:40px;padding:0 14px;border:1px solid #a793ff55;background:#a793ff12;color:#c8bdff;font-size:9px;font-weight:800;letter-spacing:.65px}.bottom-actions .update-shortcut:hover:not(:disabled){background:#a793ff24}.bottom-actions .update-shortcut:disabled{opacity:.62;cursor:progress}body.light .bottom-actions .update-shortcut{color:#5e4ba7;border-color:#8b78da55;background:#8b78da12}
 body.light .page-top{background:color-mix(in srgb,var(--bg) 91%,transparent)}
 body.light .update-shortcut{color:#5e4ba7;border-color:#8b78da44;background:#8b78da12}
 @media(max-width:980px){.welcome{min-height:215px}.welcome-orb{right:-6%;opacity:.72}.art{height:125px}.top-actions{gap:8px}.update-shortcut{padding:8px}}

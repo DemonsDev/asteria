@@ -12,19 +12,20 @@ window.asteriaAuth.onAuthLink(result=>{if(result.ok){showLauncher(result.user);}
 window.asteriaAuth.getSession().then(result=>{if(result.ok&&result.user)showLauncher(result.user);}).catch(()=>{});
 const status=document.querySelector('#status');
 const updateButton=document.querySelector('#updateButton');
-const updateStatus=document.querySelector('#updateStatus');
 let updateState='idle';
+const playButton=document.querySelector('#playButton');
+let updatesConfirmed=false;
 function renderUpdateState(info){
   updateState=info.state;
   updateButton.disabled=['checking','downloading'].includes(info.state);
-  if(info.state==='checking'){updateButton.textContent='VÉRIFICATION…';updateStatus.textContent='Recherche d’une nouvelle version';}
-  else if(info.state==='available'){updateButton.textContent=`TÉLÉCHARGER ${info.version||''}`.trim();updateStatus.textContent='Une mise à jour est disponible';}
-  else if(info.state==='downloading'){updateButton.textContent=`TÉLÉCHARGEMENT ${info.percent||0}%`;updateStatus.textContent='Le launcher télécharge la mise à jour';}
-  else if(info.state==='downloaded'){updateButton.textContent='REDÉMARRER POUR METTRE À JOUR';updateStatus.textContent=`Version ${info.version||''} prête à installer`;}
-  else if(info.state==='current'){updateButton.textContent='À JOUR · REVÉRIFIER';updateStatus.textContent=`Version ${info.version||''} · aucune mise à jour disponible`;}
-  else if(info.state==='development'){updateButton.textContent='MISES À JOUR';updateStatus.textContent=info.message||'Disponible dans la version installée';}
-  else if(info.state==='error'){updateButton.textContent='RÉESSAYER';updateStatus.textContent=info.message||'Vérification impossible';}
-  else{updateButton.textContent='VÉRIFIER LES MISES À JOUR';updateStatus.textContent='';}
+  if(info.state==='checking'){updatesConfirmed=false;playButton.disabled=true;updateButton.textContent='VÉRIFICATION…';status.textContent='Recherche d’une mise à jour…';}
+  else if(info.state==='available'){updatesConfirmed=false;playButton.disabled=true;updateButton.textContent=`TÉLÉCHARGER ${info.version||''}`.trim();status.textContent='Une mise à jour est disponible. Télécharge-la avant de jouer.';}
+  else if(info.state==='downloading'){updatesConfirmed=false;playButton.disabled=true;updateButton.textContent=`TÉLÉCHARGEMENT ${info.percent||0}%`;status.textContent='Téléchargement de la mise à jour du launcher…';}
+  else if(info.state==='downloaded'){updatesConfirmed=false;playButton.disabled=true;updateButton.textContent='REDÉMARRER POUR METTRE À JOUR';status.textContent=`Version ${info.version||''} prête. Redémarre le launcher pour jouer.`;}
+  else if(info.state==='current'){updatesConfirmed=true;playButton.disabled=false;updateButton.disabled=false;updateButton.textContent='À JOUR ✓';status.textContent=`Launcher à jour${info.version?` · version ${info.version}`:''}. Tu peux lancer le jeu.`;}
+  else if(info.state==='development'){updatesConfirmed=true;playButton.disabled=false;updateButton.disabled=false;updateButton.textContent='VERSION DE TEST';status.textContent=info.message||'Mode test : vérification en ligne disponible dans le launcher installé.';}
+  else if(info.state==='error'){updatesConfirmed=false;playButton.disabled=true;updateButton.disabled=false;updateButton.textContent='RÉESSAYER';status.textContent=info.message||'Vérification impossible. Réessaie avant de jouer.';}
+  else{updatesConfirmed=false;playButton.disabled=true;updateButton.disabled=false;updateButton.textContent='METTRE À JOUR';status.textContent='Vérifie les mises à jour avant de lancer le jeu.';}
 }
 window.asteriaLauncher.onUpdateState(renderUpdateState);
 updateButton.addEventListener('click',async()=>{
@@ -41,12 +42,11 @@ updateButton.addEventListener('click',async()=>{
     if(!result.ok)renderUpdateState({state:result.state||'error',message:result.message});
   }
 });
-const playButton=document.querySelector('#playButton');
 const playButtonLabel=playButton.innerHTML;
-function setGameButtonState(running,launching=false){playButton.disabled=running||launching;playButton.innerHTML=launching?'<span>…</span> LANCEMENT… <b></b>':running?'<span>●</span> LANCÉ <b>✓</b>':playButtonLabel;}
+function setGameButtonState(running,launching=false){playButton.disabled=running||launching||!updatesConfirmed;playButton.innerHTML=launching?'<span>…</span> LANCEMENT… <b></b>':running?'<span>●</span> LANCÉ <b>✓</b>':playButtonLabel;}
 window.asteriaLauncher.getClientState().then(state=>{if(state.running){setGameButtonState(true);status.textContent='Minecraft est déjà lancé.';}}).catch(()=>{});
-playButton.addEventListener('click',async()=>{setGameButtonState(false,true);status.textContent='Préparation du client NeoForge 26.3…';try{const result=await window.asteriaLauncher.launchDevClient();status.textContent=result.message;if(result.ok)setGameButtonState(true);else setGameButtonState(false);}catch(error){status.textContent='Impossible de démarrer le client de test.';setGameButtonState(false);}});
-window.asteriaLauncher.onDevClientExit(()=>{status.textContent='Minecraft est fermé. Tu peux le relancer.';setGameButtonState(false);});
+playButton.addEventListener('click',async()=>{if(!updatesConfirmed)return;setGameButtonState(false,true);status.textContent='Préparation du client NeoForge 26.3…';try{const result=await window.asteriaLauncher.launchDevClient();status.textContent=result.message;if(result.ok)setGameButtonState(true);else setGameButtonState(false);}catch(error){status.textContent='Impossible de démarrer le client de test.';setGameButtonState(false);}});
+window.asteriaLauncher.onDevClientExit(()=>{status.textContent=updatesConfirmed?'Minecraft est fermé. Tu peux le relancer.':'Vérifie les mises à jour avant de lancer le jeu.';setGameButtonState(false);});
 const modal=document.querySelector('#settingsModal');function openSettings(){modal.classList.remove('hidden');}function closeSettings(){modal.classList.add('hidden');}
 document.querySelector('#settingsButton').addEventListener('click',openSettings);document.querySelector('#settingsShortcut').addEventListener('click',openSettings);document.querySelector('#closeSettings').addEventListener('click',closeSettings);document.querySelector('#closeBackdrop').addEventListener('click',closeSettings);
 const themeToggle=document.querySelector('#themeToggle');const themeKey='asteria-theme-v2';function setTheme(light){document.body.classList.toggle('light',light);themeToggle.classList.toggle('on',light);themeToggle.setAttribute('aria-pressed',String(light));localStorage.setItem(themeKey,light?'light':'dark');}setTheme(localStorage.getItem(themeKey)==='light');themeToggle.addEventListener('click',()=>setTheme(!document.body.classList.contains('light')));
