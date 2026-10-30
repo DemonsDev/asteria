@@ -15,6 +15,7 @@ const updateButton=document.querySelector('#updateButton');
 let updateState='idle';
 const playButton=document.querySelector('#playButton');
 let updatesConfirmed=false;
+let clientRunning=false;
 function renderUpdateState(info){
   updateState=info.state;
   updateButton.disabled=['checking','downloading'].includes(info.state);
@@ -22,8 +23,8 @@ function renderUpdateState(info){
   else if(info.state==='available'){updatesConfirmed=false;playButton.disabled=true;updateButton.textContent=`TÉLÉCHARGER ${info.version||''}`.trim();status.textContent='Une mise à jour est disponible. Télécharge-la avant de jouer.';}
   else if(info.state==='downloading'){updatesConfirmed=false;playButton.disabled=true;updateButton.textContent=`TÉLÉCHARGEMENT ${info.percent||0}%`;status.textContent='Téléchargement de la mise à jour du launcher…';}
   else if(info.state==='downloaded'){updatesConfirmed=false;playButton.disabled=true;updateButton.textContent='REDÉMARRER POUR METTRE À JOUR';status.textContent=`Version ${info.version||''} prête. Redémarre le launcher pour jouer.`;}
-  else if(info.state==='current'){updatesConfirmed=true;playButton.disabled=false;updateButton.disabled=false;updateButton.textContent='À JOUR ✓';status.textContent=`Launcher à jour${info.version?` · version ${info.version}`:''}. Tu peux lancer le jeu.`;}
-  else if(info.state==='development'){updatesConfirmed=true;playButton.disabled=false;updateButton.disabled=false;updateButton.textContent='VERSION DE TEST';status.textContent=info.message||'Mode test : vérification en ligne disponible dans le launcher installé.';}
+  else if(info.state==='current'){updatesConfirmed=true;setGameButtonState(clientRunning);updateButton.disabled=false;updateButton.textContent='À JOUR ✓';status.textContent=clientRunning?'Launcher à jour. Minecraft est déjà lancé.':`Launcher à jour${info.version?` · version ${info.version}`:''}. Tu peux lancer le jeu.`;}
+  else if(info.state==='development'){updatesConfirmed=true;setGameButtonState(clientRunning);updateButton.disabled=false;updateButton.textContent='VERSION DE TEST';status.textContent=info.message||'Mode test : vérification en ligne disponible dans le launcher installé.';}
   else if(info.state==='error'){updatesConfirmed=false;playButton.disabled=true;updateButton.disabled=false;updateButton.textContent='RÉESSAYER';status.textContent=info.message||'Vérification impossible. Réessaie avant de jouer.';}
   else{updatesConfirmed=false;playButton.disabled=true;updateButton.disabled=false;updateButton.textContent='METTRE À JOUR';status.textContent='Vérifie les mises à jour avant de lancer le jeu.';}
 }
@@ -43,7 +44,7 @@ updateButton.addEventListener('click',async()=>{
   }
 });
 const playButtonLabel=playButton.innerHTML;
-function setGameButtonState(running,launching=false){playButton.disabled=running||launching||!updatesConfirmed;playButton.innerHTML=launching?'<span>…</span> LANCEMENT… <b></b>':running?'<span>●</span> LANCÉ <b>✓</b>':playButtonLabel;}
+function setGameButtonState(running,launching=false){clientRunning=running;playButton.disabled=running||launching||!updatesConfirmed;playButton.innerHTML=launching?'<span>…</span> LANCEMENT… <b></b>':running?'<span>●</span> LANCÉ <b>✓</b>':playButtonLabel;}
 window.asteriaLauncher.getClientState().then(state=>{if(state.running){setGameButtonState(true);status.textContent='Minecraft est déjà lancé.';}}).catch(()=>{});
 playButton.addEventListener('click',async()=>{if(!updatesConfirmed)return;setGameButtonState(false,true);status.textContent='Préparation du client NeoForge 26.3…';try{const result=await window.asteriaLauncher.launchDevClient();status.textContent=result.message;if(result.ok)setGameButtonState(true);else setGameButtonState(false);}catch(error){status.textContent='Impossible de démarrer le client de test.';setGameButtonState(false);}});
 window.asteriaLauncher.onDevClientExit(()=>{status.textContent=updatesConfirmed?'Minecraft est fermé. Tu peux le relancer.':'Vérifie les mises à jour avant de lancer le jeu.';setGameButtonState(false);});
