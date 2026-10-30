@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self';style-src 'self';script-src 'self';img-src 'self' data:;connect-src 'self' https://hugjwphcsscnuuhcvkfy.supabase.co"><title>Asteria Launcher</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="launcher-state.css"></head>
+<body>
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-glow"></div><div class="auth-brand"><span class="brand-icon">A</span><b>ASTERIA</b><small>LAUNCHER</small></div>
+    <div class="auth-card">
+      <div class="auth-logo">A</div>
+      <div id="loginPanel" class="auth-panel">
+        <div class="eyebrow">BIENVENUE DANS TON UNIVERS</div><h1>Connecte-toi</h1><p class="auth-lead">Connecte ton compte Asteria et rejoins l’aventure.</p>
+        <form id="loginForm"><label>Adresse e-mail<input type="email" placeholder="nom@exemple.fr" autocomplete="email" required></label><label>Mot de passe<input type="password" placeholder="Ton mot de passe" autocomplete="current-password" required></label><div class="auth-options"><button type="button" id="forgotButton" class="text-button">Mot de passe oublié ?</button><span>Connexion sécurisée bientôt</span></div><button class="auth-submit" type="submit">SE CONNECTER <b>→</b></button></form>
+        <div id="loginMessage" class="auth-message"></div><p class="auth-switch">Pas encore de compte ? <button id="showRegister" class="text-button accent">Créer un compte</button></p>
+        <button id="previewButton" class="preview-link">Continuer en aperçu <span>→</span></button>
+      </div>
+      <div id="registerPanel" class="auth-panel hidden">
+        <div class="eyebrow">REJOINS L’AVENTURE</div><h1>Créer un compte</h1><p class="auth-lead">Prépare ton profil pour ton univers Minecraft.</p>
+        <form id="registerForm"><div class="form-grid"><label>Adresse e-mail<input type="email" placeholder="nom@exemple.fr" autocomplete="email" required></label><label>Pseudo<input type="text" placeholder="Ton pseudo" autocomplete="username" minlength="3" maxlength="16" required></label><label>Mot de passe<input id="newPassword" type="password" placeholder="8 caractères minimum" autocomplete="new-password" minlength="8" required></label><label>Confirmer le mot de passe<input id="confirmPassword" type="password" placeholder="Répète ton mot de passe" autocomplete="new-password" minlength="8" required></label></div><label class="check-row"><input type="checkbox" required><span>J’accepte les conditions d’utilisation du projet.</span></label><label class="check-row"><input type="checkbox"><span>Je souhaite recevoir les actualités du projet.</span></label><button class="auth-submit" type="submit">CRÉER MON COMPTE <b>→</b></button></form>
+        <div id="registerMessage" class="auth-message"></div><p class="auth-switch">Tu as déjà un compte ? <button id="showLogin" class="text-button accent">Connecte-toi</button></p>
+      </div>
+    </div>
+    <div class="auth-footer">PROTOTYPE LOCAL <span>·</span> LES COMPTES EN LIGNE ARRIVENT PLUS TARD</div>
+  </section>
+  <div id="launcherApp" class="hidden">
+  <header class="titlebar"><div class="brand"><span class="brand-icon">A</span><b>ASTERIA</b></div><div class="titlebar-label">LAUNCHER</div></header>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-section"><div class="section-title">TON UNIVERS</div><button class="nav-item active" data-view="home" data-label="ACCUEIL"><span class="nav-icon">◈</span> Accueil</button><button class="nav-item" data-view="play" data-label="JOUER"><span class="nav-icon">▶</span> Jouer</button><button class="nav-item" data-view="shop" data-label="BOUTIQUE"><span class="nav-icon">◇</span> Boutique <small class="nav-soon">Bientôt</small></button><button class="nav-item" data-view="news" data-label="ACTUALITÉS"><span class="nav-icon">▣</span> Actualités</button><button class="nav-item" data-view="radio" data-label="RADIO"><span class="nav-icon">♫</span> Radio</button><button class="nav-item" data-view="settings" data-label="PARAMÈTRES"><span class="nav-icon">⚙</span> Paramètres</button></div>
+      <div class="side-bottom"><div class="player"><div class="avatar">A</div><div class="player-info"><strong>Joueur</strong><small>Prototype local</small></div><button id="settingsButton" class="gear" aria-label="Paramètres">⚙</button></div><button class="logout" id="accountButton">◉　Compte à connecter plus tard</button></div>
+    </aside>
+    <main class="content">
+      <div class="page-top"><div><div class="crumb">ASTERIA <span>/</span> ACCUEIL</div><div class="online-count"><i></i> Prototype en développement</div></div><div class="top-actions"><span class="update-status" id="updateStatus" aria-live="polite"></span><button class="update-shortcut" id="updateButton">VÉRIFIER LES MISES À JOUR</button><button class="settings-shortcut" id="settingsShortcut">⚙ <span>Paramètres</span></button></div></div>
+      <section id="homeView" class="view">
+        <div class="welcome"><div class="welcome-copy"><div class="eyebrow">ASTERIA · UNIVERS DE CIVILISATIONS</div><h1>Un monde neuf.<br><em>À toi de l’écrire.</em></h1><p>Choisis ton peuple, bâtis ta cité et prépare les étoiles.</p><button class="hero-action" id="openCivilizations">CHOISIR MA CIVILISATION <span>→</span></button></div><div class="welcome-orb"><div class="orb-ring"></div><div class="orb">A</div><span class="orb-star">✦</span></div></div>
+        <div class="section-heading"><div><h2>Les premières étapes</h2><p>Le projet prend forme, fonctionnalité après fonctionnalité.</p></div><span class="counter">01 — 02</span></div>
+        <div class="news-grid">
+          <article class="news-card feature"><div class="art art-world"><span class="art-symbol">◈</span><span class="art-label">CIVILISATIONS</span></div><div class="news-copy"><small>PROCHAINE ÉTAPE</small><h3>Choisis ton<br>point de départ</h3><p>Quatre peuples à découvrir dans l’écran Jouer. Le système de factions viendra ensuite.</p></div></article>
+          <article class="news-card"><div class="art art-armor"><span class="armor-shape">✧</span><span class="art-label">NOUVELLE FRONTIÈRE</span></div><div class="news-copy"><small>EN PRÉPARATION</small><h3>Des mondes<br>à explorer</h3><p>Mines, énergie et voyages spatiaux sont prévus pour les prochaines étapes.</p></div></article>
+        </div>
+      </section>
+      <section id="civilizationsView" class="view civilization-page hidden"><div class="eyebrow">TON AVENTURE · POINT DE DÉPART</div><h1>Choisis ta civilisation</h1><p>Chaque peuple aura sa cité et son identité. Ton choix est enregistré sur cet ordinateur.</p><div class="civ-grid">
+        <button class="civ-card" data-civ="Auralis" aria-pressed="false"><span class="civ-art civ-auralis"><i>✧</i><small>01 · HAUTES TERRES</small></span><span class="civ-copy"><strong>Auralis</strong><span>Une cité bâtie sur les plateaux et les sommets.</span></span><span class="civ-select">CHOISIR <b>→</b></span></button>
+        <button class="civ-card" data-civ="Thalassa" aria-pressed="false"><span class="civ-art civ-thalassa"><i>⌁</i><small>02 · ARCHIPEL</small></span><span class="civ-copy"><strong>Thalassa</strong><span>Un peuple de marins, de ports et d’îles.</span></span><span class="civ-select">CHOISIR <b>→</b></span></button>
+        <button class="civ-card" data-civ="Vesper" aria-pressed="false"><span class="civ-art civ-vesper"><i>☼</i><small>03 · TERRES DORÉES</small></span><span class="civ-copy"><strong>Vesper</strong><span>Une civilisation forgée autour du désert et du soleil.</span></span><span class="civ-select">CHOISIR <b>→</b></span></button>
+        <button class="civ-card" data-civ="Boréalis" aria-pressed="false"><span class="civ-art civ-borealis"><i>❄</i><small>04 · FRONTIÈRE DU NORD</small></span><span class="civ-copy"><strong>Boréalis</strong><span>Un peuple du grand froid, des forêts et des minerais.</span></span><span class="civ-select">CHOISIR <b>→</b></span></button>
+      </div><div class="prototype-note"><span>i</span><div><strong>Choix de prototype</strong><small>Les civilisations et leurs territoires ne sont pas encore reliés au monde de jeu.</small></div></div></section>
+      <section id="shopView" class="view hidden"><div class="simple-page shop-page"><div class="eyebrow">OBJETS · COSMÉTIQUES · SOUTIEN</div><h1>Boutique</h1><p>Un espace pour les objets du projet, quand son économie sera prête.</p><div class="shop-panel"><div class="shop-emblem">◇</div><strong>La boutique ouvrira plus tard</strong><span>Les achats ne sont pas encore activés. On construit d’abord le jeu et ses fonctionnalités.</span><button class="subtle-action" data-view="home">DÉCOUVRIR LES CIVILISATIONS <b>→</b></button></div></div></section>
+      <section id="newsView" class="view hidden"><div class="simple-page"><div class="eyebrow">JOURNAL DU PROJET</div><h1>Actualités</h1><p>Les annonces de ton serveur seront affichées ici.</p><div class="empty-state">✦<strong>Rien à annoncer pour l’instant</strong><span>Cette page se remplira au fil du développement.</span></div></div></section>
+      <section id="radioView" class="view hidden"><div class="simple-page"><div class="eyebrow">AMBIANCE</div><h1>Radio</h1><p>La radio pourra être ajoutée plus tard.</p><div class="empty-state">♫<strong>La radio arrive plus tard</strong><span>On se concentre d’abord sur le launcher et le jeu.</span></div></div></section>
+      <div class="bottom-bar"><div class="launch-status"><i></i><span id="status">Prêt à démarrer · Minecraft 26.3 / NeoForge</span></div><button class="play-button" id="playButton"><span>▶</span> LANCER LE JEU <b>↗</b></button></div>
+    </main>
+  </div>
+  <div id="settingsModal" class="modal hidden"><div class="modal-backdrop" id="closeBackdrop"></div><section class="settings-panel"><button class="close" id="closeSettings">×</button><div class="eyebrow">PERSONNALISATION</div><h2>Paramètres</h2><p class="settings-intro">Choisis l’apparence du launcher.</p><div class="setting-row"><div><strong>Thème clair</strong><small>Activer un fond clair à la place du thème sombre.</small></div><button id="themeToggle" class="toggle" aria-label="Changer le thème"><span></span></button></div><div class="setting-note">Ton choix est enregistré sur cet ordinateur.</div></section></div>
+  </div>
+  <script src="renderer.js"></script>
+</body></html>
+
+

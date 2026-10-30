@@ -1,0 +1,55 @@
+{
+  "name": "mon-launcher",
+  "version": "0.1.2",
+  "description": "Premier prototype du launcher Minecraft",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DemonsDev/asteria.git"
+  },
+  "main": "src/main.js",
+  "private": true,
+  "scripts": {
+    "start": "npm run build:preload && electron .",
+    "pack": "npm run build:preload && electron-builder --win nsis",
+    "pack:release": "npm run build:preload && electron-builder --win nsis --publish never",
+    "build:preload": "esbuild src/preload.js --bundle --platform=node --format=cjs --external:electron --outfile=src/preload.bundle.cjs"
+  },
+  "devDependencies": {
+    "electron": "^45.1.0",
+    "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.2"
+  },
+  "build": {
+    "artifactName": "Asteria-Launcher-Setup-${version}.${ext}",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "DemonsDev",
+        "repo": "asteria",
+        "releaseType": "release"
+      }
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "productName": "Asteria Launcher",
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "appId": "fr.asteria.launcher"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "electron-updater": "^6.8.11"
+  }
+}

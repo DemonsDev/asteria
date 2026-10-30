@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.cache-electron/
+.cache-builder/
+.localappdata/
+.build-tmp/
+src/preload.bundle.cjs
+npm-debug.log*
